@@ -1,0 +1,87 @@
+﻿@model IEnumerable<Domain.Digimon>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Digimon Characters</title>
+    <style>
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            width: 200px;
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+            .card img {
+                max-width: 100%;
+                height: auto;
+                margin-bottom: 10px;
+            }
+    </style>
+</head>
+<body>
+    <h1>Digimon Characters</h1>
+
+    <div class="container">
+        @{
+            var count = 0;
+        }
+        @foreach (var digimon in Model)
+        {
+            count++;
+            <div class="card">
+                <img id="DigimonImg_@count"  src="@digimon.Img" alt="@digimon.Name" />
+                <h2 id="DigimonName_@count">@digimon.Name</h2>
+                <p id="DigimonLevel_@count">Level: @digimon.Level</p>
+                <button class="AddDigimonbtn btn-primary" id="@count">Add to Favorites</button>
+            </div>
+        }
+    </div>
+</body>
+</html>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).on('click' , '.AddDigimonbtn' , function(){
+        var DigimonCount = $(this).attr('id');
+        console.log(DigimonCount);
+        var DigimonName = $('#DigimonName_' + DigimonCount).html();
+        var DigimonImg = $('#DigimonImg_' + DigimonCount).attr('src');
+        var DigimonLevel = $('#DigimonLevel_' + DigimonCount).html();
+        console.log(DigimonName);
+        var Digimon = {
+            Name: DigimonName,
+            Img: DigimonImg,
+            Level: DigimonLevel
+        }
+        console.log(Digimon);
+        addToFavorites(Digimon);
+    })
+    function addToFavorites(Digimon) {
+        $.ajax({
+            url: '/Home/AddDigimon',
+            type: 'POST',
+            data:Digimon,
+            success: function (result) {
+                Swal.fire('Success!', 'Digimon added to favorites successfully!', 'success');                
+            },
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong!',
+                })
+            }
+        });
+    }
+</script>

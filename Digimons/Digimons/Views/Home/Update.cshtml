@@ -1,0 +1,26 @@
+﻿@model Domain.Digimon
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Digimon</title>
+</head>
+<body>
+    <h1>Update Digimon</h1>
+
+    <form method="post" action="/Home/UpdateDigimon">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <label for="name">Name:</label>
+        <input type="text" name="name" value="@Model.Name" /><br />
+
+        <label for="level">Level:</label>
+        <input type="text" name="level" value="@Model.Level" /><br />
+
+        <label for="img">Image URL:</label>
+        <input type="text" name="img" value="@Model.Img" /><br />
+
+        <input type="submit" value="Update" />
+    </form>
+</body>
+</html>
